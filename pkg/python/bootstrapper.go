@@ -1,11 +1,19 @@
 package python
 
-import "fmt"
+import (
+	"fmt"
 
-type Bootstrapper struct{}
+	"github.com/elnaterator/bootstrapper/pkg/core"
+)
 
-func NewBootstrapper() *Bootstrapper {
-	return &Bootstrapper{}
+type Bootstrapper struct {
+	project *core.Project
+}
+
+func NewBootstrapper(project *core.Project) *Bootstrapper {
+	return &Bootstrapper{
+		project: project,
+	}
 }
 
 func (b *Bootstrapper) Bootstrap() {

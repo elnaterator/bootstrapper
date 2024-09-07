@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
 
-	"github.com/elnaterator/bootstrapper/pkg/color"
+	"github.com/elnaterator/bootstrapper/pkg/core"
 	"github.com/elnaterator/bootstrapper/pkg/golang"
-	"github.com/elnaterator/bootstrapper/pkg/options"
+	"github.com/elnaterator/bootstrapper/pkg/input"
 	"github.com/elnaterator/bootstrapper/pkg/python"
 )
 
@@ -14,21 +13,15 @@ func main() {
 
 	fmt.Print("\nBOOTSTRAPPER\n\n")
 
-	var dir string
-	fmt.Println(color.Wrap("project directory?", color.Red))
-	_, err := fmt.Scan(&dir)
-	if err != nil {
-		log.Fatal("unable to receive input")
-	}
-	fmt.Println(dir)
+	project := &core.Project{}
+	project.ProjectType = input.Choice("Project type?", []string{"golang", "python"})
+	project.RootDir = input.Text("Project root directory?")
 
-	lang := options.GetOptions("project type? ", []string{"golang", "python"})
-
-	switch lang {
+	switch project.ProjectType {
 	case "golang":
-		golang.NewBootstrapper().Bootstrap()
+		golang.NewBootstrapper(project).Bootstrap()
 	case "python":
-		python.NewBootstrapper().Bootstrap()
+		python.NewBootstrapper(project).Bootstrap()
 	}
 
 }

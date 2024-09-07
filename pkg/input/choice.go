@@ -1,4 +1,4 @@
-package options
+package input
 
 import (
 	"fmt"
@@ -9,18 +9,17 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/elnaterator/bootstrapper/pkg/color"
 )
 
 var (
-	itemStyle           = lipgloss.NewStyle().PaddingLeft(2)
-	selectedItemStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("#0f2b63"))
-	ResetTerminalColor  = "\033[0m"
-	ChoiceTerminalColor = "\033[34m"
+	itemStyle         = lipgloss.NewStyle().PaddingLeft(2)
+	selectedItemStyle = lipgloss.NewStyle().Foreground(lipgloss.Color(color.Blue.Hex))
 )
 
-func GetOptions(title string, options []string) string {
+func Choice(title string, options []string) string {
 
-	fmt.Println(title)
+	fmt.Println(color.Term(title, color.Cyan))
 
 	items := mapToItems(options)
 
@@ -43,7 +42,7 @@ func GetOptions(title string, options []string) string {
 	}
 
 	choice := out.(model).choice
-	fmt.Println(ChoiceTerminalColor + choice + ResetTerminalColor)
+	fmt.Println(choice)
 	return choice
 
 }
