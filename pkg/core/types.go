@@ -16,3 +16,10 @@ type File struct {
 	Name    string
 	Content string
 }
+
+func BuildFile(name string, content string) File {
+	return File{
+		Name:    name,
+		Content: content,
+	}
+}
