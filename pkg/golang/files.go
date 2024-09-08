@@ -27,9 +27,14 @@ func mainGo() core.File {
 	return core.BuildFile("main.go", MainGo)
 }
 
-//go:embed gitignore
-var Gitignore string
-
 func gitignore() core.File {
-	return core.BuildFile(".gitignore", Gitignore)
+	return core.BuildFile(".gitignore", ".idea\n")
+}
+
+func goVersion(version string) core.File {
+	return core.BuildFile(".go-version", version)
+}
+
+func goMod(version string, module string) core.File {
+	return core.BuildFile("go.mod", "module "+module+"\n\ngo "+version)
 }

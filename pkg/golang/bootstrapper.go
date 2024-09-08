@@ -1,6 +1,8 @@
 package golang
 
 import (
+	"strings"
+
 	"github.com/elnaterator/bootstrapper/pkg/core"
 	"github.com/elnaterator/bootstrapper/pkg/input"
 )
@@ -14,11 +16,18 @@ func NewBootstrapper(project *core.Project) core.Bootstrapper {
 type Bootstrapper struct {
 	project    *core.Project
 	goVersions []string
+	version    string
+	module     string
 }
 
 func (b *Bootstrapper) CollectAdditionalOptions() {
+
 	b.fetchGoVersions()
-	input.Choice("Go version?", b.goVersions)
+	version := input.Choice("Go version?", b.goVersions)
+	b.version = strings.Replace(version, "go", "", 1) // we just want the number
+
+	module := input.Text("Module name?")
+	b.module = module
 }
 
 func (b *Bootstrapper) fetchGoVersions() {
@@ -36,6 +45,8 @@ func (b *Bootstrapper) BuildModel() *core.Directory {
 			makefile(),
 			readme(),
 			gitignore(),
+			goVersion(b.version),
+			goMod(b.version, b.module),
 		},
 		Directories: []core.Directory{
 			{
