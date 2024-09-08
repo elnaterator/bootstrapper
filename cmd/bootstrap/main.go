@@ -42,7 +42,10 @@ func main() {
 		fmt.Println(color.Term("Skipping project creation.", color.Primary))
 	} else {
 		fmt.Println(color.Term("Creating project...", color.Primary))
-		b.Bootstrap()
+		err := b.Bootstrap()
+		if err != nil {
+			log.Fatalf("unable to boostrap project: %v", err)
+		}
 		fmt.Println(color.Term("Project created.", color.Primary))
 	}
 

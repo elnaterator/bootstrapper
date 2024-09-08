@@ -3,7 +3,7 @@ package core
 type Bootstrapper interface {
 	CollectAdditionalOptions()
 	BuildModel() *Directory
-	Bootstrap()
+	Bootstrap() error
 }
 
 type Directory struct {

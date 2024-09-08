@@ -32,5 +32,6 @@ func (b *Bootstrapper) BuildModel() *core.Directory {
 	return &b.project.RootDir
 }
 
-func (b *Bootstrapper) Bootstrap() {
+func (b *Bootstrapper) Bootstrap() error {
+	return nil
 }

@@ -21,5 +21,6 @@ func (b *Bootstrapper) BuildModel() *core.Directory {
 	return nil
 }
 
-func (b *Bootstrapper) Bootstrap() {
+func (b *Bootstrapper) Bootstrap() error {
+	return nil
 }
