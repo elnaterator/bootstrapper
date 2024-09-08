@@ -9,7 +9,7 @@ import (
 
 func Text(title string) string {
 	var dir string
-	fmt.Println(color.Term(title, color.Cyan))
+	fmt.Println(color.Term(title, color.Primary))
 	_, err := fmt.Scan(&dir)
 	if err != nil {
 		log.Fatal("unable to receive input")

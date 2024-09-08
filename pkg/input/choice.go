@@ -14,12 +14,12 @@ import (
 
 var (
 	itemStyle         = lipgloss.NewStyle().PaddingLeft(2)
-	selectedItemStyle = lipgloss.NewStyle().Foreground(lipgloss.Color(color.Blue.Hex))
+	selectedItemStyle = lipgloss.NewStyle().Foreground(lipgloss.Color(color.Secondary.Hex))
 )
 
 func Choice(title string, options []string) string {
 
-	fmt.Println(color.Term(title, color.Cyan))
+	fmt.Println(color.Term(title, color.Primary))
 
 	items := mapToItems(options)
 
