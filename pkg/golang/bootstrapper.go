@@ -1,7 +1,6 @@
 package golang
 
 import (
-	"os"
 	"strings"
 
 	"github.com/elnaterator/bootstrapper/pkg/core"
@@ -69,15 +68,5 @@ func (b *Bootstrapper) BuildModel() *core.Directory {
 }
 
 func (b *Bootstrapper) Bootstrap() error {
-	core.Traverse(&b.project.RootDir, writeFile, nil)
-	return nil
-}
-
-func writeFile(file *core.File, parents []string) error {
-	filePath := strings.Join(append(parents, file.Name), string(os.PathSeparator))
-	err := core.WriteFile(filePath, file.Content)
-	if err != nil {
-		return err
-	}
-	return nil
+	return core.Traverse(&b.project.RootDir, core.WriteFileHandler, nil)
 }

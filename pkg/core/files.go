@@ -2,29 +2,28 @@ package core
 
 import (
 	"bufio"
-	"encoding/json"
-	"io"
 	"log"
-	"net/http"
 	"os"
 	"path"
+	"strings"
 )
 
-func GetJson(url string) interface{} {
-	resp, err := http.Get(url)
-	if err != nil {
-		panic(err)
+type Directory struct {
+	Name        string
+	Files       []File
+	Directories []Directory
+}
+
+type File struct {
+	Name    string
+	Content string
+}
+
+func BuildFile(name string, content string) File {
+	return File{
+		Name:    name,
+		Content: content,
 	}
-	content, err := io.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
-	}
-	var result interface{}
-	err = json.Unmarshal(content, &result)
-	if err != nil {
-		panic(err)
-	}
-	return result
 }
 
 func WriteFile(filePath string, content string) error {
@@ -70,21 +69,39 @@ func traverseRecursive(
 	}
 
 	if dirHandler != nil {
-		dirHandler(dir, parents)
+		err := dirHandler(dir, parents)
+		if err != nil {
+			return err
+		}
 	}
 
 	parents = append(parents, dir.Name)
 
 	for _, f := range dir.Files {
 		if fileHandler != nil {
-			fileHandler(&f, parents)
+			err := fileHandler(&f, parents)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
 	for _, d := range dir.Directories {
-		traverseRecursive(&d, parents, fileHandler, dirHandler)
+		err := traverseRecursive(&d, parents, fileHandler, dirHandler)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
 
+}
+
+func WriteFileHandler(file *File, parents []string) error {
+	filePath := strings.Join(append(parents, file.Name), string(os.PathSeparator))
+	err := WriteFile(filePath, file.Content)
+	if err != nil {
+		return err
+	}
+	return nil
 }
