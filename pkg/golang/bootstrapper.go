@@ -1,6 +1,7 @@
 package golang
 
 import (
+	"os"
 	"strings"
 
 	"github.com/elnaterator/bootstrapper/pkg/core"
@@ -18,6 +19,7 @@ type Bootstrapper struct {
 	goVersions []string
 	version    string
 	module     string
+	command    string
 }
 
 func (b *Bootstrapper) CollectAdditionalOptions() {
@@ -28,6 +30,8 @@ func (b *Bootstrapper) CollectAdditionalOptions() {
 
 	module := input.Text("Module name?")
 	b.module = module
+	parts := strings.Split(module, "/")
+	b.command = parts[len(parts)-1]
 }
 
 func (b *Bootstrapper) fetchGoVersions() {
@@ -42,8 +46,8 @@ func (b *Bootstrapper) BuildModel() *core.Directory {
 	b.project.RootDir = core.Directory{
 		Name: b.project.RootDirName,
 		Files: []core.File{
-			makefile(),
-			readme(),
+			makefile(b.command),
+			readme(b.command),
 			gitignore(),
 			goVersion(b.version),
 			goMod(b.version, b.module),
@@ -53,7 +57,7 @@ func (b *Bootstrapper) BuildModel() *core.Directory {
 				Name: "cmd",
 				Directories: []core.Directory{
 					{
-						Name:  "app",
+						Name:  b.command,
 						Files: []core.File{mainGo()},
 					},
 				},
@@ -65,5 +69,15 @@ func (b *Bootstrapper) BuildModel() *core.Directory {
 }
 
 func (b *Bootstrapper) Bootstrap() error {
+	core.Traverse(&b.project.RootDir, writeFile, nil)
+	return nil
+}
+
+func writeFile(file *core.File, parents []string) error {
+	filePath := strings.Join(append(parents, file.Name), string(os.PathSeparator))
+	err := core.WriteFile(filePath, file.Content)
+	if err != nil {
+		return err
+	}
 	return nil
 }

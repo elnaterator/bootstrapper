@@ -2,6 +2,7 @@ package golang
 
 import (
 	_ "embed"
+	"strings"
 
 	"github.com/elnaterator/bootstrapper/pkg/core"
 )
@@ -9,15 +10,19 @@ import (
 //go:embed Makefile
 var Makefile string
 
-func makefile() core.File {
-	return core.BuildFile("Makefile", Makefile)
+func makefile(command string) core.File {
+	content := strings.Replace(Makefile, "command", command, -1)
+	return core.BuildFile("Makefile", content)
 }
 
 //go:embed README.md
 var Readme string
 
-func readme() core.File {
-	return core.BuildFile("README.md", Readme)
+func readme(command string) core.File {
+	title := strings.ToTitle(command)
+	content := strings.Replace(Readme, "Title", title, 1)
+	content = strings.Replace(content, "command", command, -1)
+	return core.BuildFile("README.md", content)
 }
 
 //go:embed main.go.txt
