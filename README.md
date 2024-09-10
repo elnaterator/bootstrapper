@@ -1,6 +1,6 @@
 # Bootstrap Apps
 
-Quickly get set up to start coding a new project of various types, speed up POCs, etc.
+Create the boilerplate code for projects the way I like it. 
 
 ## Golang
 

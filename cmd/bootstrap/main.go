@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	fmt.Print("\nBOOTSTRAPPER\n\n")
+	fmt.Printf(color.Term("\n============\nBOOTSTRAPPER\n============\n\n", color.Banner))
 
 	project := &core.Project{}
 
@@ -23,12 +23,6 @@ func main() {
 
 	projectType := input.Choice("Project type?", ProjectTypes)
 	project.SetType(projectType)
-
-	language := input.Choice("Language?", LanguagesByProjectType[projectType])
-	project.SetLanguage(language)
-
-	buildSystem := input.Choice("Build system?", BuildSystemsByLanguage[language])
-	project.SetBuildSystem(buildSystem)
 
 	b := newBootstrapper(project)
 	b.CollectAdditionalOptions()
@@ -51,17 +45,13 @@ func main() {
 
 }
 
-var ProjectTypes = []string{"basic", "cli"}
-
-var LanguagesByProjectType = map[string][]string{"basic": {"golang", "python"}, "cli": {"golang", "python"}}
-
-var BuildSystemsByLanguage = map[string][]string{"golang": {"gomod"}, "python": {"poetry", "pip"}}
+var ProjectTypes = []string{"golang-basic", "python-basic"}
 
 func newBootstrapper(p *core.Project) core.Bootstrapper {
-	switch p.Language {
-	case "golang":
+	switch p.Type {
+	case "golang-basic":
 		return golang.NewBootstrapper(p)
-	case "python":
+	case "python-basic":
 		return python.NewBootstrapper(p)
 	}
 	log.Fatal("no bootstrapper for given project options")

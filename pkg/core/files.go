@@ -28,7 +28,7 @@ func BuildFile(name string, content string) File {
 
 func WriteFile(filePath string, content string) error {
 	parentDirPath := path.Dir(filePath)
-	err := os.MkdirAll(parentDirPath, os.ModeDir)
+	err := os.MkdirAll(parentDirPath, 0755)
 	if err != nil {
 		return err
 	}
@@ -42,6 +42,11 @@ func WriteFile(filePath string, content string) error {
 		}
 	}()
 	w := bufio.NewWriter(f)
+	defer func() {
+		if err := w.Flush(); err != nil {
+			panic(err)
+		}
+	}()
 	_, err = w.WriteString(content)
 	if err != nil {
 		return err

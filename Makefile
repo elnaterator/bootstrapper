@@ -4,6 +4,9 @@
 build: ## build
 	go build -o bin/bootstrap cmd/bootstrap/main.go
 
+install: ## install the binary to ~/.local/bin/
+	cp ./bin/bootstrap ~/.local/bin/bootstrap
+
 test: ## run unit tests
 	go test ./... -v
 
